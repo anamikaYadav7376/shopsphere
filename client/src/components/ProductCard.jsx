@@ -16,7 +16,9 @@ export default function ProductCard({ product }) {
         <Link to={`/product/${product._id}`} className="product-name">{product.name}</Link>
         <div className="row-between">
           <strong>{formatINR(product.price)}</strong>
-          <span className="muted">★ {product.rating.toFixed(1)}</span>
+          <span className="muted">
+            {product.rating > 0 ? `★ ${product.rating.toFixed(1)}` : 'No rating yet'}
+          </span>
         </div>
         <button className="btn full" disabled={outOfStock} onClick={() => addToCart(product)}>
           {outOfStock ? 'Out of stock' : 'Add to cart'}

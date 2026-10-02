@@ -7,6 +7,7 @@
 - 🔐 JWT authentication (register / login) with customer and admin roles
 - 🛍️ Product listing with search, category filter and sorting
 - 📦 Product detail page with stock status
+- ⭐ Product reviews & ratings from verified (delivered-order) customers
 - 🧺 Shopping cart (saved in localStorage)
 - 🚚 Checkout with shipping address and Cash on Delivery
 - 📜 Order history for customers
@@ -83,6 +84,8 @@ npm run dev                 # app on http://localhost:5173
 | POST   | `/api/products`           | Admin    | Create product           |
 | PUT    | `/api/products/:id`       | Admin    | Update product           |
 | DELETE | `/api/products/:id`       | Admin    | Delete product           |
+| GET    | `/api/products/:id/reviews` | Public  | List product reviews     |
+| POST   | `/api/products/:id/reviews` | User    | Add review (delivered order only, one per product) |
 | POST   | `/api/orders`             | User     | Place order              |
 | GET    | `/api/orders/mine`        | User     | My orders                |
 | GET    | `/api/orders/:id`         | Owner/Admin | Order detail          |

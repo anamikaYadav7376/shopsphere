@@ -8,6 +8,7 @@
   --danger: #d6334b;
   --success: #1f9d55;
   --border: #e4e4ee;
+  --star: #f5a623;
   --radius: 10px;
 }
 
@@ -77,6 +78,18 @@ textarea { min-height: 80px; }
 .detail { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 .detail img { border-radius: var(--radius); }
 .qty { width: 80px; }
+
+.reviews { margin-top: 36px; }
+.review-summary { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.stars { color: var(--star); letter-spacing: 2px; }
+.review { padding: 14px 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+.review p { margin: 0; }
+.star-picker { display: flex; gap: 2px; }
+.star-picker button {
+  background: none; border: none; padding: 0 2px; font-size: 1.6rem; line-height: 1;
+  cursor: pointer; color: #d4d4e2;
+}
+.star-picker button.active { color: var(--star); }
 
 .cart-list { display: flex; flex-direction: column; gap: 12px; }
 .cart-item { display: flex; align-items: center; gap: 16px; padding: 12px; }
