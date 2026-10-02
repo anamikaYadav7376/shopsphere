@@ -40,7 +40,7 @@ export default function Navbar() {
           aria-label="Toggle theme"
           title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          {theme === 'dark' ? '☀️' : '🌙'}
+          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
         </button>
       </nav>
     </header>
