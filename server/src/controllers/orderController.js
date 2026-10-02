@@ -28,17 +28,50 @@ export const createOrder = asyncHandler(async (req, res) => {
   // This should use prices from the database instead (see issue tracker).
   const totalAmount = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-  // TODO: stock is not reduced after an order is placed.
+  // Decrease stock atomically for each product and rollback if any update fails
+  const decrementedItems = [];
+  try {
+    for (const item of items) {
+      const result = await Product.updateOne(
+        { _id: item.product, stock: { $gte: item.quantity } },
+        { $inc: { stock: -item.quantity } }
+      );
 
-  const order = await Order.create({
-    user: req.user._id,
-    items,
-    shippingAddress,
-    paymentMethod,
-    totalAmount,
-  });
+      if (result.matchedCount === 0) {
+        const product = await Product.findById(item.product);
+        if (!product) {
+          res.status(404);
+          throw new Error(`Product not found: ${item.product}`);
+        }
+        res.status(400);
+        throw new Error(`Not enough stock for ${product.name}`);
+      }
 
-  res.status(201).json(order);
+      decrementedItems.push(item);
+    }
+
+    const order = await Order.create({
+      user: req.user._id,
+      items,
+      shippingAddress,
+      paymentMethod,
+      totalAmount,
+    });
+
+    res.status(201).json(order);
+  } catch (error) {
+    for (const item of decrementedItems) {
+      try {
+        await Product.updateOne(
+          { _id: item.product },
+          { $inc: { stock: item.quantity } }
+        );
+      } catch (rollbackError) {
+        console.error(`Failed to rollback stock for product ${item.product}:`, rollbackError);
+      }
+    }
+    throw error;
+  }
 });
 
 // GET /api/orders/mine
