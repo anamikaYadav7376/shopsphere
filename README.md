@@ -10,6 +10,7 @@
 - 🧺 Shopping cart (saved in localStorage)
 - 🚚 Checkout with shipping address and Cash on Delivery
 - 📜 Order history for customers
+- ❤️ Wishlist: save products with a heart button, move them to the cart
 - 🛠️ Admin panel: add / edit / delete products, update order status
 
 ## 🧱 Tech stack
@@ -88,6 +89,9 @@ npm run dev                 # app on http://localhost:5173
 | GET    | `/api/orders/:id`         | Owner/Admin | Order detail          |
 | GET    | `/api/orders`             | Admin    | All orders               |
 | PATCH  | `/api/orders/:id/status`  | Admin    | Change order status      |
+| GET    | `/api/wishlist`           | User     | My wishlist products     |
+| POST   | `/api/wishlist/:productId` | User    | Add product to wishlist  |
+| DELETE | `/api/wishlist/:productId` | User    | Remove from wishlist     |
 
 ## 🤝 Contributing
 
