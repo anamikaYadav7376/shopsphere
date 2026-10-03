@@ -86,6 +86,7 @@ npm run dev                 # app on http://localhost:5173
 | POST   | `/api/orders`             | User     | Place order              |
 | GET    | `/api/orders/mine`        | User     | My orders                |
 | GET    | `/api/orders/:id`         | Owner/Admin | Order detail          |
+| PATCH  | `/api/orders/:id/cancel`  | Owner    | Cancel pending/confirmed order (restores stock) |
 | GET    | `/api/orders`             | Admin    | All orders               |
 | PATCH  | `/api/orders/:id/status`  | Admin    | Change order status      |
 

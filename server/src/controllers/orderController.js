@@ -80,3 +80,64 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   await order.save();
   res.json(order);
 });
+
+// PATCH /api/orders/:id/cancel
+export const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+  if (!order.user.equals(req.user._id)) {
+    res.status(403);
+    throw new Error('Not allowed to cancel this order');
+  }
+
+  if (order.status === 'shipped' || order.status === 'delivered') {
+    res.status(400);
+    throw new Error(`Cannot cancel an order that is ${order.status}`);
+  }
+
+  if (order.status !== 'pending' && order.status !== 'confirmed') {
+    res.status(400);
+    throw new Error('Order is already cancelled');
+  }
+
+  const previousStatus = order.status;
+
+  // Atomically flip the status so concurrent cancel requests
+  // can never restore stock twice for the same order
+  const cancelled = await Order.findOneAndUpdate(
+    { _id: order._id, status: { $in: ['pending', 'confirmed'] } },
+    { $set: { status: 'cancelled' } },
+    { new: true }
+  );
+
+  if (!cancelled) {
+    res.status(400);
+    throw new Error('Order can no longer be cancelled');
+  }
+
+  // Restore stock for every item; roll the status back if any update fails
+  try {
+    for (const item of cancelled.items) {
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { stock: item.quantity } }
+      );
+    }
+  } catch (error) {
+    try {
+      await Order.updateOne(
+        { _id: cancelled._id, status: 'cancelled' },
+        { $set: { status: previousStatus } }
+      );
+    } catch (rollbackError) {
+      console.error(`Failed to rollback status for order ${cancelled._id}:`, rollbackError);
+    }
+    throw error;
+  }
+
+  res.json(cancelled);
+});
