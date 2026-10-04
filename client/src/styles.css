@@ -97,6 +97,12 @@ textarea { min-height: 80px; }
 .table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
 .table th, .table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
 
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { padding: 16px; }
+.stat-label { margin: 0; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.stat-value { margin: 6px 0 2px; font-size: 1.7rem; font-weight: 700; }
+.stat-card .muted { margin: 0; font-size: 0.85rem; }
+
 .empty { text-align: center; padding: 60px 0; }
 .footer { text-align: center; color: var(--muted); padding: 24px; border-top: 1px solid var(--border); }
 
