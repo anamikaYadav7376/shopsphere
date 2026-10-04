@@ -101,62 +101,49 @@ textarea { min-height: 80px; }
 .footer { text-align: center; color: var(--muted); padding: 24px; border-top: 1px solid var(--border); }
 
 @media (max-width: 768px) {
+  /* Force navbar items to stack vertically */
   .navbar {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
     padding: 12px 16px;
   }
 
+  /* Override the inner .row container so links wrap cleanly */
+  .navbar .row,
   .nav-links {
+    flex-wrap: wrap;
+    width: 100%;
     gap: 10px 14px;
   }
 
+  /* Ensure search input & category dropdowns stack full width */
   .filters {
-    gap: 10px;
+    flex-direction: column;
+    width: 100%;
   }
 
-  .filters input {
-    min-width: 140px;
+  .filters input,
+  .filters select {
+    width: 100%;
   }
 
+  /* Stack product detail page into a single column */
   .detail {
     grid-template-columns: 1fr;
     gap: 24px;
   }
 
-  .detail img {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-  }
-
+  /* Stack cart items vertically */
   .cart-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
   }
 
-  .cart-item img {
-    width: 100px;
-    height: 75px;
-  }
-
-  .summary {
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
+  /* Allow admin tables to scroll horizontally on small screens */
   .table {
     display: block;
-    width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     white-space: nowrap;
-  }
-
-  .row-between {
-    flex-wrap: wrap;
-    gap: 12px;
   }
 }
