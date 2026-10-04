@@ -3,12 +3,20 @@ import Product from '../models/Product.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 // POST /api/orders
+/** Valid Indian pincode: exactly 6 digits, first digit 1-9 */
+const PINCODE_RE = /^[1-9]\d{5}$/;
+
 export const createOrder = asyncHandler(async (req, res) => {
   const { items, shippingAddress, paymentMethod } = req.body;
 
   if (!items || items.length === 0) {
     res.status(400);
     throw new Error('Order must contain at least one item');
+  }
+
+  if (!shippingAddress?.pincode || !PINCODE_RE.test(shippingAddress.pincode)) {
+    res.status(400);
+    throw new Error('Invalid pincode. Must be exactly 6 digits and must not start with 0.');
   }
 
   // Check that every product exists and has enough stock
